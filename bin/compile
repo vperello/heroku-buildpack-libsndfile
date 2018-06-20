@@ -15,11 +15,17 @@ cd $BUILD_DIR
 mkdir -p $VENDOR_DIR
 cd $VENDOR_DIR
 mkdir -p libsndfile1
+
 cd libsndfile1
-curl -L --silent $DOWNLOAD_URL | tar xJ --strip-components=1
+curl $DOWNLOAD_URL -s -O
+tar -C . -xvf libsndfile-1.0.28.tar.gz
+
+cd libsndfile-1.0.28
 ./configure --prefix="$HOME/vendor/libsndfile1"
 make
 make install
+cd ..
+
 echo "exporting PATH" | indent
 PROFILE_PATH="$BUILD_DIR/.profile.d/libsndfile1.sh"
 mkdir -p $(dirname $PROFILE_PATH)
