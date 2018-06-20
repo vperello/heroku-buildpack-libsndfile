@@ -21,7 +21,7 @@ curl $DOWNLOAD_URL -s -O
 tar -C . -xvf libsndfile-1.0.28.tar.gz
 
 cd libsndfile-1.0.28
-./configure --prefix="$HOME/vendor/libsndfile1"
+./configure --prefix="/app/app/vendor/libsndfile1"
 make
 make install
 cd ..
@@ -29,4 +29,4 @@ cd ..
 echo "exporting PATH" | indent
 PROFILE_PATH="$BUILD_DIR/.profile.d/libsndfile1.sh"
 mkdir -p $(dirname $PROFILE_PATH)
-echo 'export PATH="$PATH:${HOME}/vendor/libsndfile1"' >> $PROFILE_PATH
+echo 'export PATH="$PATH:/app/app/vendor/libsndfile1"' >> $PROFILE_PATH
