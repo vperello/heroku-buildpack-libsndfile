@@ -22,5 +22,5 @@ tar -C . -xvf libsndfile-1.0.28.tar.gz
 
 cd libsndfile-1.0.28
 ./configure --prefix=$HOME/vendor/libsndfile1
-make -C $HOME/vendor/libsndfile1/libsndfile-1.0.28
-make install -C $HOME/vendor/libsndfile1/libsndfile-1.0.28
+make 
+make install
