@@ -22,5 +22,7 @@ tar -C . -xvf libsndfile-1.0.28.tar.gz
 
 cd libsndfile-1.0.28
 ./configure --prefix=$HOME/vendor/libsndfile1
+
+export PKG_CONFIG_PATH="$HOME/vendor/libsndfile1/lib/pkgconfig:$PKG_CONFIG_PATH"
 make 
 make install
