@@ -47,8 +47,9 @@ make distclean > /dev/null 2>&1
 echo "copy data lib - include"
 
 mkdir -p "/tmp/vendor/libsndfile"
-cp -R "$BUILD_DIR/vendor/include" "/tmp/vendor/libsndfile"
-cp -R "$BUILD_DIR/vendor/lib" "/tmp/vendor/libsndfile"
+ls
+cp -R "$BUILD_DIR/include" "/tmp/vendor/libsndfile"
+cp -R "$BUILD_DIR/lib" "/tmp/vendor/libsndfile"
 
 echo "-----> Caching build."
 mkdir -p $2
