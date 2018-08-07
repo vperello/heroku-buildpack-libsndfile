@@ -1,5 +1,5 @@
 #!/bin/sh
 
 # this pack is valid for all apps
-echo "libsndfile1"
+echo "libsndfile1 1.0.28"
 exit 0

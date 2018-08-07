@@ -1,28 +1,57 @@
-#!/bin/sh
+# #!/usr/bin/env bash
+# echo "-----&gt; Installing libsndfile 1.0.28"
+
+#!/bin/bash
 
 indent() {
-  sed -u 's/^/       /'
+  sed 's/^/       /'
 }
 
-echo "-----> Install libsndfile1"
-BUILD_DIR=$1
-VENDOR_DIR="vendor"
-DOWNLOAD_URL="http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.28.tar.gz"
+# begin yasm
 
-echo "DOWNLOAD_URL = " $DOWNLOAD_URL | indent
+PROFILE_PATH="$1/.profile.d/libsndfile.sh"
 
-cd $BUILD_DIR
-mkdir -p $VENDOR_DIR
-cd $VENDOR_DIR
-mkdir -p libsndfile1
+echo "exporting PATH and LIBRARY_PATH" | indent
+mkdir -p $(dirname $PROFILE_PATH)
 
-cd libsndfile1
-curl $DOWNLOAD_URL -s -O
-tar -C . -xvf libsndfile-1.0.28.tar.gz
+echo 'export PATH="$PATH:$HOME/vendor/bin"' >> $PROFILE_PATH
+echo 'export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/vendor/lib"' >> $PROFILE_PATH
 
+mkdir -p "$1/vendor"
+export BUILD_DIR=$1"/vendor"
+export PATH="$BUILD_DIR/bin:"$PATH
+echo "-----> Building in $BUILD_DIR"
+
+
+if [ -f "$2/vendor/bin/libsndfile" ]; then
+	echo "Using cached build." | indent
+	cp -R  "$2/vendor" $1
+	exit 0
+fi
+
+# begin lame
+
+echo "-----> Starting libsndfile compilation"
+echo "Downloading libsndfile-1.0.28.tar.gz" | indent
+wget --quiet https://s3-eu-west-1.amazonaws.com/soundtracktor-public/libsndfile-1.0.28.tar.gz
+echo "Unpacking libsndfile" | indent
+tar -xf libsndfile-1.0.28.tar.gz
 cd libsndfile-1.0.28
-./configure --prefix=$HOME/vendor/libsndfile1
+echo "Running configure" | indent
+./configure --prefix="$BUILD_DIR" >/dev/null 2>&1
+echo "Running make with target install" | indent
+make install >/dev/null 2>&1
+echo "Running make with target distclean" | indent
+make distclean > /dev/null 2>&1
 
-export PKG_CONFIG_PATH="$HOME/vendor/libsndfile1/lib/pkgconfig:$PKG_CONFIG_PATH"
-make 
-make install
+echo "copy data lib - include"
+
+mkdir -p "/tmp/vendor/libsndfile"
+cp -R "$BUILD_DIR/vendor/include" "/tmp/vendor/libsndfile"
+cp -R "$BUILD_DIR/vendor/lib" "/tmp/vendor/libsndfile"
+
+echo "-----> Caching build."
+mkdir -p $2
+cp -R "$BUILD_DIR/" $2
+
+cd ..
